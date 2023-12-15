@@ -10,8 +10,8 @@ using PoS.Data;
 namespace PoS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231215190325_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20231215192039_InitialMigrations")]
+    partial class InitialMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

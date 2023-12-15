@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Edvis\\III Kursas\\PSP\\III Lab\\Point of Sale\\PoS\\PoS\\PoS.csproj": {}
+    "D:\\Edvis\\III Kursas\\PSP\\III Lab\\Point of Sale\\PoS\\PoS.csproj": {}
   },
   "projects": {
-    "D:\\Edvis\\III Kursas\\PSP\\III Lab\\Point of Sale\\PoS\\PoS\\PoS.csproj": {
+    "D:\\Edvis\\III Kursas\\PSP\\III Lab\\Point of Sale\\PoS\\PoS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Edvis\\III Kursas\\PSP\\III Lab\\Point of Sale\\PoS\\PoS\\PoS.csproj",
+        "projectUniqueName": "D:\\Edvis\\III Kursas\\PSP\\III Lab\\Point of Sale\\PoS\\PoS.csproj",
         "projectName": "PoS",
-        "projectPath": "D:\\Edvis\\III Kursas\\PSP\\III Lab\\Point of Sale\\PoS\\PoS\\PoS.csproj",
+        "projectPath": "D:\\Edvis\\III Kursas\\PSP\\III Lab\\Point of Sale\\PoS\\PoS.csproj",
         "packagesPath": "C:\\Users\\Edvinas\\.nuget\\packages\\",
-        "outputPath": "D:\\Edvis\\III Kursas\\PSP\\III Lab\\Point of Sale\\PoS\\PoS\\obj\\",
+        "outputPath": "D:\\Edvis\\III Kursas\\PSP\\III Lab\\Point of Sale\\PoS\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Edvinas\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -64,7 +64,7 @@
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
-              "version": "[6.4.0, )"
+              "version": "[6.5.0, )"
             }
           },
           "imports": [
