@@ -2,6 +2,7 @@
 
 namespace PoS.Services
 {
+    /*
     public interface IWorkerService
     {
         IEnumerable<Worker> GetAllWorkers();
@@ -9,5 +10,10 @@ namespace PoS.Services
         void CreateWorker(Worker worker);
         void UpdateWorker(Worker worker);
         void DeleteWorker(string workerId);
+    }
+    */
+    public interface IWorkerService : IGenericService<Worker>
+    {
+        // Additional Worker-specific methods, if needed
     }
 }
