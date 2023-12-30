@@ -1,6 +1,7 @@
-﻿using WebApplication1.Models;
+﻿using PoS.Services.GenericServices;
+using WebApplication1.Models;
 
-namespace PoS.Services
+namespace PoS.Services.WorkerServices
 {
     /*
     public interface IWorkerService
