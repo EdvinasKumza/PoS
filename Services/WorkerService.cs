@@ -6,9 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using PoS.Data;
 using WebApplication1.Models;
 
+
 namespace PoS.Services
 {
-    public class WorkerService : IWorkerService
+    /*public class WorkerService : IWorkerService
     {
         private readonly ApplicationDbContext _dbContext;
 
@@ -48,5 +49,15 @@ namespace PoS.Services
                 _dbContext.SaveChanges();
             }
         }
+    }
+    */
+
+    public class WorkerService : GenericService<Worker>, IWorkerService
+    {
+        public WorkerService(ApplicationDbContext dbContext) : base(dbContext)
+        {
+        }
+
+        // Implement any additional Worker-specific methods, if needed
     }
 }
