@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PoS.Services;
+using PoS.Services.WorkerServices;
 using WebApplication1.Models;
 
 namespace PoS.Controllers

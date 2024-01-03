@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using global::PoS.Data;
+using PoS.Data;
 using Microsoft.EntityFrameworkCore;
 using PoS.Data;
 using WebApplication1.Models;
 
-namespace PoS.Services
+namespace PoS.Services.GenericServices
 {
     public class GenericService<T> : IGenericService<T> where T : class
     {
@@ -35,7 +35,7 @@ namespace PoS.Services
 
         public void Update(T entity)
         {
-            _dbContext.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _dbContext.Entry(entity).State = EntityState.Modified;
             _dbContext.SaveChanges();
         }
 

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using WebApplication1.Models;
 
-namespace PoS.Services
+namespace PoS.Services.GenericServices
 {
     public interface IGenericService<T>
     {

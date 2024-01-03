@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using global::PoS.Data;
+using PoS.Data;
 using Microsoft.EntityFrameworkCore;
 using PoS.Data;
+using PoS.Services.GenericServices;
 using WebApplication1.Models;
 
 
-namespace PoS.Services
+namespace PoS.Services.WorkerServices
 {
     /*public class WorkerService : IWorkerService
     {

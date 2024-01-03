@@ -1,6 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using PoS.Data;
-using PoS.Services;
+using PoS.Services.GenericServices;
+using PoS.Services.PermissionServices;
+using PoS.Services.ProductServices;
+using PoS.Services.RoleServices;
+using PoS.Services.ServiceServices;
+using PoS.Services.WorkerServices;
+using WebApplication1.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +25,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 builder.Services.AddScoped<IWorkerService, WorkerService>();
+builder.Services.AddScoped<IGenericService<Permission>, GenericService<Permission>>();
+builder.Services.AddScoped<IGenericService<Service>, GenericService<Service>>();
+builder.Services.AddScoped<IGenericService<Tenant>, GenericService<Tenant>>();
+builder.Services.AddScoped<IGenericService<Role>, GenericService<Role>>();
+builder.Services.AddScoped<IGenericService<Product>, GenericService<Product>>();
+
 
 var app = builder.Build();
 
