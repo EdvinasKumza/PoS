@@ -30,6 +30,10 @@ builder.Services.AddScoped<IGenericService<Service>, GenericService<Service>>();
 builder.Services.AddScoped<IGenericService<Tenant>, GenericService<Tenant>>();
 builder.Services.AddScoped<IGenericService<Role>, GenericService<Role>>();
 builder.Services.AddScoped<IGenericService<Product>, GenericService<Product>>();
+builder.Services.AddScoped<IGenericService<Supplier>, GenericService<Supplier>>();
+builder.Services.AddScoped<IGenericService<Order>, GenericService<Order>>();
+builder.Services.AddScoped<IGenericService<Customer>, GenericService<Customer>>();
+builder.Services.AddScoped<IGenericService<CustomerLoyalty>, GenericService<CustomerLoyalty>>();
 
 
 var app = builder.Build();
