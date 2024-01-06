@@ -7,6 +7,7 @@ using PoS.Services.RoleServices;
 using PoS.Services.ServiceServices;
 using PoS.Services.WorkerServices;
 using WebApplication1.Models;
+using LoyaltyProgram = PoS.Services.LoyaltyProgramServices.LoyaltyProgram;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,8 +33,18 @@ builder.Services.AddScoped<IGenericService<Role>, GenericService<Role>>();
 builder.Services.AddScoped<IGenericService<Product>, GenericService<Product>>();
 builder.Services.AddScoped<IGenericService<Supplier>, GenericService<Supplier>>();
 builder.Services.AddScoped<IGenericService<Order>, GenericService<Order>>();
+builder.Services.AddScoped<IGenericService<OrderItem>, GenericService<OrderItem>>();
 builder.Services.AddScoped<IGenericService<Customer>, GenericService<Customer>>();
 builder.Services.AddScoped<IGenericService<CustomerLoyalty>, GenericService<CustomerLoyalty>>();
+builder.Services.AddScoped<IGenericService<Discount>, GenericService<Discount>>();
+builder.Services.AddScoped<IGenericService<GiftCard>, GenericService<GiftCard>>();
+builder.Services.AddScoped<IGenericService<GiftCardActivation>, GenericService<GiftCardActivation>>();
+builder.Services.AddScoped<IGenericService<GiftCardTransaction>, GenericService<GiftCardTransaction>>();
+builder.Services.AddScoped<IGenericService<InventoryOrder>, GenericService<InventoryOrder>>();
+builder.Services.AddScoped<IGenericService<InventoryOrderItem>, GenericService<InventoryOrderItem>>();
+builder.Services.AddScoped<IGenericService<LoyaltyProgram>, GenericService<LoyaltyProgram>>();
+builder.Services.AddScoped<IGenericService<Payment>, GenericService<Payment>>();
+builder.Services.AddScoped<IGenericService<PaymentMethod>, GenericService<PaymentMethod>>();
 
 
 var app = builder.Build();

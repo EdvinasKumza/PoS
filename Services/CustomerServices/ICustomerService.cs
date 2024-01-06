@@ -1,7 +1,7 @@
 ﻿using PoS.Services.GenericServices;
 using WebApplication1.Models;
 
-namespace PoS.Services.CustomerService;
+namespace PoS.Services.CustomerServices;
 
 public interface ICustomerService : IGenericService<Customer>
 {        
