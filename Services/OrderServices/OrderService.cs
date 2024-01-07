@@ -6,6 +6,8 @@ using PoS.Dtos.OrderItem;
 using PoS.Repositories.OrderRepository;
 using PoS.Repositories.ProductRepository;
 using PoS.Repositories.ServiceRepository;
+using PoS.Repositories.DiscountRepository;
+using PoS.Repositories.LoyaltyProgramRepository;
 
 namespace PoS.Services.OrderServices;
 
@@ -14,12 +16,17 @@ public class OrderService: IOrderService
     private readonly IOrderRepository _orderRepository;
     private readonly IProductRepository _productRepository;
     private readonly IServiceRepository _serviceRepository;
+    private readonly IDiscountRepository _discountRepository;
+    private readonly ILoyaltyProgramRepository _loyaltyProgramRepository;
 
-    public OrderService(IOrderRepository orderRepository, IProductRepository productRepository, IServiceRepository serviceRepository)
+
+    public OrderService(IOrderRepository orderRepository, IProductRepository productRepository, IServiceRepository serviceRepository, IDiscountRepository discountRepository, ILoyaltyProgramRepository loyaltyProgramRepository)
     {
         _orderRepository = orderRepository;
         _productRepository = productRepository;
         _serviceRepository = serviceRepository;
+        _discountRepository = discountRepository;
+        _loyaltyProgramRepository = loyaltyProgramRepository;
     }
    
     private OrderItem CreateOrderItemFromDto(OrderItemDto newItemDto)
@@ -149,4 +156,79 @@ public class OrderService: IOrderService
 
         return order;
     }
+    public Order ApplyDiscount(string orderId, string discountId)
+    {
+        var order = _orderRepository.GetById(orderId);
+
+        if (order == null)
+        {
+            throw new InvalidOperationException("Order not found.");
+        }
+
+        var discount = _discountRepository.GetById(discountId);
+
+        if (discount == null)
+        {
+            throw new InvalidOperationException("Discount not found.");
+        }
+
+        // Apply discount to order
+        order.DiscountApplied += discount.AmountOff;
+        order.TotalAmount -= discount.AmountOff;
+
+        _orderRepository.Update(order);
+
+        return order;
+    }
+
+    public Order ApplyLoyaltyProgram(string orderId, string loyaltyProgramId)
+    {
+        var order = _orderRepository.GetById(orderId);
+
+        if (order == null)
+        {
+            throw new InvalidOperationException("Order not found.");
+        }
+
+        var loyaltyProgram = _loyaltyProgramRepository.GetById(loyaltyProgramId);
+
+        if (loyaltyProgram == null)
+        {
+            throw new InvalidOperationException("Loyalty program not found.");
+        }
+
+        // Check if customer has enough points
+        if (order.Customer.LoyaltyPoints >= loyaltyProgram.PointRequired)
+        {
+            // Deduct points and apply loyalty reward
+            order.Customer.LoyaltyPoints -= loyaltyProgram.PointRequired;
+            // You can add specific logic here to apply the loyalty reward
+
+            _orderRepository.Update(order);
+        }
+        else
+        {
+            throw new InvalidOperationException("Insufficient loyalty points.");
+        }
+
+        return order;
+    }
+
+    public Order AddTip(string orderId, decimal tipAmount)
+    {
+        var order = _orderRepository.GetById(orderId);
+
+        if (order == null)
+        {
+            throw new InvalidOperationException("Order not found.");
+        }
+
+        // Add tip to order
+        order.TotalAmount += tipAmount;
+
+        _orderRepository.Update(order);
+
+        return order;
+    }
+
 }

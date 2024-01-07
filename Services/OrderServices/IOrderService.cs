@@ -10,5 +10,8 @@ namespace PoS.Services.OrderServices
         Order Create(CreateOrderDto createOrderDto);
         Order AddItemToOrder(string orderId, OrderItemDto newItemDto);
         Order RemoveItemFromOrder(string orderId, string orderItemId);
+        Order ApplyDiscount(string orderId, string discountId);
+        Order ApplyLoyaltyProgram(string orderId, string loyaltyProgramId);
+        Order AddTip(string orderId, decimal tipAmount);
     }
 }

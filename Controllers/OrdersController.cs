@@ -100,5 +100,47 @@ namespace PoS.Controllers
             _orderGenericService.Delete(id);
             return NoContent();
         }
+        [HttpPost("{orderId}/applyDiscount/{discountId}")]
+        public IActionResult ApplyDiscount(string orderId, string discountId)
+        {
+            try
+            {
+                var order = _orderService.ApplyDiscount(orderId, discountId);
+                return Ok(order);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("{orderId}/applyLoyaltyProgram/{loyaltyProgramId}")]
+        public IActionResult ApplyLoyaltyProgram(string orderId, string loyaltyProgramId)
+        {
+            try
+            {
+                var order = _orderService.ApplyLoyaltyProgram(orderId, loyaltyProgramId);
+                return Ok(order);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("{orderId}/addTip")]
+        public IActionResult AddTip(string orderId, [FromBody] decimal tipAmount)
+        {
+            try
+            {
+                var order = _orderService.AddTip(orderId, tipAmount);
+                return Ok(order);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
+
 }
