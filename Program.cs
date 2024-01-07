@@ -9,7 +9,6 @@ using PoS.Services.WorkerServices;
 using PoS.Services.TimeSlotServices;
 using WebApplication1.Models;
 using PoS.Repositories.TimeSlotBookingRepository;
-using LoyaltyProgram = PoS.Services.LoyaltyProgramServices.LoyaltyProgram;
 using PoS.Repositories.TimeSlotRepository;
 using PoS.Services.OrderServices;
 using PoS.Repositories.OrderRepository;
@@ -17,6 +16,7 @@ using PoS.Repositories.ProductRepository;
 using PoS.Repositories.ServiceRepository;
 using PoS.Repositories.DiscountRepository;
 using PoS.Repositories.LoyaltyProgramRepository;
+using PoS.Services.LoyaltyProgramServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
