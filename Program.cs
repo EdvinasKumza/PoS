@@ -11,6 +11,10 @@ using WebApplication1.Models;
 using PoS.Repositories.TimeSlotBookingRepository;
 using LoyaltyProgram = PoS.Services.LoyaltyProgramServices.LoyaltyProgram;
 using PoS.Repositories.TimeSlotRepository;
+using PoS.Services.OrderServices;
+using PoS.Repositories.OrderRepository;
+using PoS.Repositories.ProductRepository;
+using PoS.Repositories.ServiceRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +38,10 @@ builder.Services.AddScoped<IGenericService<TimeSlot>, GenericService<TimeSlot>>(
 builder.Services.AddScoped<ITimeSlotBookingRepository, TimeSlotBookingRepository>();
 builder.Services.AddScoped<ITimeSlotRepository, TimeSlotRepository>();
 builder.Services.AddScoped<ITimeSlotService, TimeSlotService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddScoped<IGenericService<Permission>, GenericService<Permission>>();
 builder.Services.AddScoped<IGenericService<Service>, GenericService<Service>>();
 builder.Services.AddScoped<IGenericService<Tenant>, GenericService<Tenant>>();

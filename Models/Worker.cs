@@ -8,5 +8,6 @@
         public string Name { get; set; }
         public string UniqueCode { get; set; }
         public string RoleId { get; set; }
+        public Tenant Tenant { get; set; }
     }
 }

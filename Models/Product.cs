@@ -9,5 +9,6 @@
         public decimal Price { get; set; }
         public string Description { get; set; }
         public int StockLevel { get; set; }
+        public Tenant Tenant { get; set; }
     }
 }

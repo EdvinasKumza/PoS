@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PoS.Data;
 
@@ -10,9 +11,11 @@ using PoS.Data;
 namespace PoS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240107182952_OrderDefaultValuesUpdate")]
+    partial class OrderDefaultValuesUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.0");
@@ -284,6 +287,7 @@ namespace PoS.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("OrderId")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProductId")
@@ -546,19 +550,19 @@ namespace PoS.Migrations
             modelBuilder.Entity("WebApplication1.Models.Order", b =>
                 {
                     b.HasOne("WebApplication1.Models.Customer", "Customer")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("WebApplication1.Models.Worker", "Worker")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("PlacedBy")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("WebApplication1.Models.Tenant", "Tenant")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -572,17 +576,21 @@ namespace PoS.Migrations
 
             modelBuilder.Entity("WebApplication1.Models.OrderItem", b =>
                 {
-                    b.HasOne("WebApplication1.Models.Order", null)
+                    b.HasOne("WebApplication1.Models.Order", "Order")
                         .WithMany("Items")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WebApplication1.Models.Product", "Product")
-                        .WithMany()
+                        .WithMany("OrderItems")
                         .HasForeignKey("ProductId");
 
                     b.HasOne("WebApplication1.Models.Service", "Service")
-                        .WithMany()
+                        .WithMany("OrderItems")
                         .HasForeignKey("ServiceId");
+
+                    b.Navigation("Order");
 
                     b.Navigation("Product");
 
@@ -592,7 +600,7 @@ namespace PoS.Migrations
             modelBuilder.Entity("WebApplication1.Models.Product", b =>
                 {
                     b.HasOne("WebApplication1.Models.Tenant", "Tenant")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -603,7 +611,7 @@ namespace PoS.Migrations
             modelBuilder.Entity("WebApplication1.Models.Service", b =>
                 {
                     b.HasOne("WebApplication1.Models.Tenant", "Tenant")
-                        .WithMany()
+                        .WithMany("Services")
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -614,7 +622,7 @@ namespace PoS.Migrations
             modelBuilder.Entity("WebApplication1.Models.Worker", b =>
                 {
                     b.HasOne("WebApplication1.Models.Tenant", "Tenant")
-                        .WithMany()
+                        .WithMany("Workers")
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -622,9 +630,40 @@ namespace PoS.Migrations
                     b.Navigation("Tenant");
                 });
 
+            modelBuilder.Entity("WebApplication1.Models.Customer", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
             modelBuilder.Entity("WebApplication1.Models.Order", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.Product", b =>
+                {
+                    b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.Service", b =>
+                {
+                    b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.Tenant", b =>
+                {
+                    b.Navigation("Orders");
+
+                    b.Navigation("Products");
+
+                    b.Navigation("Services");
+
+                    b.Navigation("Workers");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.Worker", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

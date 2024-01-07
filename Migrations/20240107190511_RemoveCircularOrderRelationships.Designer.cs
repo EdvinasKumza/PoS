@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PoS.Data;
 
@@ -10,9 +11,11 @@ using PoS.Data;
 namespace PoS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240107190511_RemoveCircularOrderRelationships")]
+    partial class RemoveCircularOrderRelationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.0");
@@ -284,6 +287,7 @@ namespace PoS.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("OrderId")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProductId")
@@ -572,9 +576,11 @@ namespace PoS.Migrations
 
             modelBuilder.Entity("WebApplication1.Models.OrderItem", b =>
                 {
-                    b.HasOne("WebApplication1.Models.Order", null)
+                    b.HasOne("WebApplication1.Models.Order", "Order")
                         .WithMany("Items")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WebApplication1.Models.Product", "Product")
                         .WithMany()
@@ -583,6 +589,8 @@ namespace PoS.Migrations
                     b.HasOne("WebApplication1.Models.Service", "Service")
                         .WithMany()
                         .HasForeignKey("ServiceId");
+
+                    b.Navigation("Order");
 
                     b.Navigation("Product");
 

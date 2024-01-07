@@ -1,6 +1,8 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
 using PoS.Services.GenericServices;
+using PoS.Services.OrderServices;
+using PoS.Dtos.Order;
 using WebApplication1.Models;
 
 namespace PoS.Controllers
@@ -9,24 +11,26 @@ namespace PoS.Controllers
     [Route("[controller]")]
     public class OrdersController : ControllerBase
     {
-        private readonly IGenericService<Order> _orderService;
+        private readonly IOrderService _orderService;
+        private readonly IGenericService<Order> _orderGenericService;
 
-        public OrdersController(IGenericService<Order> orderService)
+        public OrdersController(IOrderService orderService, IGenericService<Order> orderGenericService)
         {
             _orderService = orderService;
+            _orderGenericService = orderGenericService;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            var orders = _orderService.GetAll();
+            var orders = _orderGenericService.GetAll();
             return Ok(orders);
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(string id)
         {
-            var order = _orderService.GetById(id);
+            var order = _orderGenericService.GetById(id);
             if (order == null)
             {
                 return NotFound();
@@ -36,10 +40,17 @@ namespace PoS.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(Order order)
+        public IActionResult Post([FromBody] CreateOrderDto createOrderDto)
         {
-            _orderService.Create(order);
-            return CreatedAtAction(nameof(Get), new { id = order.OrderId }, order);
+            try
+            {
+                var order = _orderService.Create(createOrderDto);
+                return CreatedAtAction(nameof(Get), new { id = order.OrderId }, order);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         
         [HttpPut("{id}")]
@@ -50,14 +61,14 @@ namespace PoS.Controllers
                 return BadRequest();
             }
 
-            _orderService.Update(order);
+            _orderGenericService.Update(order);
             return Ok(order);
         }
         
         [HttpDelete("{id}")]
         public IActionResult Delete(string id)
         {
-            _orderService.Delete(id);
+            _orderGenericService.Delete(id);
             return NoContent();
         }
     }
