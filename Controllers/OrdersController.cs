@@ -4,6 +4,7 @@ using PoS.Services.GenericServices;
 using PoS.Services.OrderServices;
 using PoS.Dtos.Order;
 using WebApplication1.Models;
+using PoS.Dtos.OrderItem;
 
 namespace PoS.Controllers
 {
@@ -64,7 +65,35 @@ namespace PoS.Controllers
             _orderGenericService.Update(order);
             return Ok(order);
         }
-        
+
+        [HttpPost("{orderId}/items")]
+        public IActionResult AddItem(string orderId, [FromBody] OrderItemDto addItemDto)
+        {
+            try
+            {
+                _orderService.AddItemToOrder(orderId, addItemDto);
+                return Ok("Item added to order successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{orderId}/items/{orderItemId}")]
+        public IActionResult RemoveItem(string orderId, string orderItemId)
+        {
+            try
+            {
+                _orderService.RemoveItemFromOrder(orderId, orderItemId);
+                return Ok("Item removed from order successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpDelete("{id}")]
         public IActionResult Delete(string id)
         {

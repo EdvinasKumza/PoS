@@ -21,6 +21,50 @@ public class OrderService: IOrderService
         _productRepository = productRepository;
         _serviceRepository = serviceRepository;
     }
+   
+    private OrderItem CreateOrderItemFromDto(OrderItemDto newItemDto)
+    {
+        OrderItem newItem;
+
+        if (!string.IsNullOrEmpty(newItemDto.ProductId))
+        {
+            var product = _productRepository.GetById(newItemDto.ProductId);
+
+            if (product == null)
+            {
+                throw new InvalidOperationException("Product not found.");
+            }
+
+            newItem = new OrderItem
+            {
+                ProductId = newItemDto.ProductId,
+                Quantity = newItemDto.Quantity,
+                TotalPrice = product.Price * newItemDto.Quantity
+            };
+        }
+        else if (!string.IsNullOrEmpty(newItemDto.ServiceId))
+        {
+            var service = _serviceRepository.GetById(newItemDto.ServiceId);
+
+            if (service == null)
+            {
+                throw new InvalidOperationException("Service not found.");
+            }
+
+            newItem = new OrderItem
+            {
+                ServiceId = newItemDto.ServiceId,
+                Quantity = newItemDto.Quantity,
+                TotalPrice = service.Price * newItemDto.Quantity
+            };
+        }
+        else
+        {
+            throw new ArgumentException("ProductId or ServiceId must be provided.");
+        }
+
+        return newItem;
+    }
 
     private List<OrderItem> MapOrderItems(List<OrderItemDto> orderItemDtos)
     {
@@ -28,32 +72,7 @@ public class OrderService: IOrderService
 
         foreach (var item in orderItemDtos)
         {
-            OrderItem orderItem;
-
-            if (!string.IsNullOrEmpty(item.ProductId))
-            {
-                var product = _productRepository.GetById(item.ProductId);
-                orderItem = new OrderItem
-                {
-                    ProductId = item.ProductId,
-                    Quantity = item.Quantity,
-                    TotalPrice = product.Price * item.Quantity
-                };
-            }
-            else if (!string.IsNullOrEmpty(item.ServiceId))
-            {
-                var service = _serviceRepository.GetById(item.ServiceId);
-                orderItem = new OrderItem
-                {
-                    ServiceId = item.ServiceId,
-                    Quantity = item.Quantity,
-                    TotalPrice = service.Price * item.Quantity
-                };
-            }
-            else
-            {
-                break; 
-            }
+            var orderItem = CreateOrderItemFromDto(item);
 
             orderItems.Add(orderItem);
         }
@@ -84,6 +103,49 @@ public class OrderService: IOrderService
         }
 
         _orderRepository.Create(order);
+
+        return order;
+    }
+
+    public Order AddItemToOrder(string orderId, OrderItemDto newItemDto)
+    {
+        var order = _orderRepository.GetById(orderId);
+
+        if (order == null)
+        {
+            throw new InvalidOperationException("Order not found.");
+        }
+
+        var newItem = CreateOrderItemFromDto(newItemDto);
+
+        order.Items.Add(newItem);
+        order.TotalAmount += newItem.TotalPrice;
+
+        _orderRepository.Update(order);
+
+        return order;
+    }
+
+    public Order RemoveItemFromOrder(string orderId, string orderItemId)
+    {
+        var order = _orderRepository.GetById(orderId);
+
+        if (order == null)
+        {
+            throw new InvalidOperationException("Order not found.");
+        }
+
+        var itemToRemove = order.Items.FirstOrDefault(item => item.OrderItemId == orderItemId);
+
+        if (itemToRemove == null)
+        {
+            throw new InvalidOperationException("Item not found in the order.");
+        }
+
+        order.TotalAmount -= itemToRemove.TotalPrice;
+        order.Items.Remove(itemToRemove);
+
+        _orderRepository.Update(order);
 
         return order;
     }
