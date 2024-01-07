@@ -6,8 +6,11 @@ using PoS.Services.ProductServices;
 using PoS.Services.RoleServices;
 using PoS.Services.ServiceServices;
 using PoS.Services.WorkerServices;
+using PoS.Services.TimeSlotServices;
 using WebApplication1.Models;
+using PoS.Repositories.TimeSlotBookingRepository;
 using LoyaltyProgram = PoS.Services.LoyaltyProgramServices.LoyaltyProgram;
+using PoS.Repositories.TimeSlotRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +28,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(connectionString);
 });
 
+builder.Services.AddScoped<ITimeSlotRepository, TimeSlotRepository>();
 builder.Services.AddScoped<IWorkerService, WorkerService>();
+builder.Services.AddScoped<IGenericService<TimeSlot>, GenericService<TimeSlot>>();
+builder.Services.AddScoped<ITimeSlotBookingRepository, TimeSlotBookingRepository>();
+builder.Services.AddScoped<ITimeSlotRepository, TimeSlotRepository>();
+builder.Services.AddScoped<ITimeSlotService, TimeSlotService>();
 builder.Services.AddScoped<IGenericService<Permission>, GenericService<Permission>>();
 builder.Services.AddScoped<IGenericService<Service>, GenericService<Service>>();
 builder.Services.AddScoped<IGenericService<Tenant>, GenericService<Tenant>>();

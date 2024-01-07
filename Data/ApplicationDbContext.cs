@@ -40,5 +40,7 @@ namespace PoS.Data
         public DbSet<Payment> Payments { get; set; }
         public DbSet<PaymentMethod> PaymentMethods { get; set; }
         public DbSet<CustomerLoyalty> CustomerLoyalties { get; set; }
+        public DbSet<TimeSlot> TimeSlots { get; set; }
+        public DbSet<TimeSlotBooking> TimeSlotBookings { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PoS.Data;
 
@@ -10,9 +11,11 @@ using PoS.Data;
 namespace PoS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240107123945_TimeSlotUpdate")]
+    partial class TimeSlotUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.0");
@@ -470,27 +473,6 @@ namespace PoS.Migrations
                     b.HasKey("TimeSlotId");
 
                     b.ToTable("TimeSlots");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.TimeSlotBooking", b =>
-                {
-                    b.Property<string>("BookingId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("BookingTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("TimeSlotId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("BookingId");
-
-                    b.ToTable("TimeSlotBookings");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Worker", b =>
