@@ -8,9 +8,10 @@ using PoS.Repositories.ProductRepository;
 using PoS.Repositories.ServiceRepository;
 using PoS.Repositories.DiscountRepository;
 using PoS.Repositories.LoyaltyProgramRepository;
+using PoS.Repositories.CustomerRepository;
 
-namespace PoS.Services.OrderServices;
-
+namespace PoS.Services.OrderServices
+{ 
 public class OrderService: IOrderService
 {
     private readonly IOrderRepository _orderRepository;
@@ -18,15 +19,19 @@ public class OrderService: IOrderService
     private readonly IServiceRepository _serviceRepository;
     private readonly IDiscountRepository _discountRepository;
     private readonly ILoyaltyProgramRepository _loyaltyProgramRepository;
+    private readonly ICustomerRepository _customerRepository;
 
 
-    public OrderService(IOrderRepository orderRepository, IProductRepository productRepository, IServiceRepository serviceRepository, IDiscountRepository discountRepository, ILoyaltyProgramRepository loyaltyProgramRepository)
+    public OrderService(IOrderRepository orderRepository, IProductRepository productRepository,
+        IServiceRepository serviceRepository, IDiscountRepository discountRepository, ILoyaltyProgramRepository loyaltyProgramRepository,
+        ICustomerRepository customerRepository)
     {
         _orderRepository = orderRepository;
         _productRepository = productRepository;
         _serviceRepository = serviceRepository;
         _discountRepository = discountRepository;
         _loyaltyProgramRepository = loyaltyProgramRepository;
+        _customerRepository = customerRepository;
     }
    
     private OrderItem CreateOrderItemFromDto(OrderItemDto newItemDto)
@@ -197,13 +202,15 @@ public class OrderService: IOrderService
             throw new InvalidOperationException("Loyalty program not found.");
         }
 
-        // Check if customer has enough points
-        if (order.Customer.LoyaltyPoints >= loyaltyProgram.PointRequired)
+            var customer = _customerRepository.GetById(order.CustomerId);
+
+            // Check if customer has enough points
+            if (customer.LoyaltyPoints >= loyaltyProgram.PointRequired)
         {
             // Deduct points and apply loyalty reward
             order.Customer.LoyaltyPoints -= loyaltyProgram.PointRequired;
-            // You can add specific logic here to apply the loyalty reward
-
+            order.TotalAmount -= loyaltyProgram.Reward;
+            order.DiscountApplied += loyaltyProgram.Reward;
             _orderRepository.Update(order);
         }
         else
@@ -213,22 +220,21 @@ public class OrderService: IOrderService
 
         return order;
     }
-
-    public Order AddTip(string orderId, decimal tipAmount)
-    {
-        var order = _orderRepository.GetById(orderId);
-
-        if (order == null)
+        public Order AddTip(string orderId, decimal tipAmount)
         {
-            throw new InvalidOperationException("Order not found.");
+            var order = _orderRepository.GetById(orderId);
+
+            if (order == null)
+            {
+                throw new InvalidOperationException("Order not found.");
+            }
+
+            // Add tip to order
+            order.Tips += tipAmount;
+
+            _orderRepository.Update(order);
+
+            return order;
         }
-
-        // Add tip to order
-        order.TotalAmount += tipAmount;
-
-        _orderRepository.Update(order);
-
-        return order;
     }
-
 }

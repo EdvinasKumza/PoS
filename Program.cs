@@ -17,6 +17,7 @@ using PoS.Repositories.ServiceRepository;
 using PoS.Repositories.DiscountRepository;
 using PoS.Repositories.LoyaltyProgramRepository;
 using PoS.Services.LoyaltyProgramServices;
+using PoS.Repositories.CustomerRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,6 +44,7 @@ builder.Services.AddScoped<ITimeSlotService, TimeSlotService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 builder.Services.AddScoped<ILoyaltyProgramRepository, LoyaltyProgramRepository>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
