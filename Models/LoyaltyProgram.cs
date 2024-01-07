@@ -5,7 +5,7 @@
         [Key]
         public string LoyaltyProgramId { get; set; }
         public int PointRequired { get; set; }
-        public string Reward { get; set; }
+        public decimal Reward { get; set; }
         public string CreatedBy { get; set; }
     }
 }

@@ -17,5 +17,7 @@
         public Tenant Tenant { get; set; }
         public Worker Worker { get; set; }
         public ICollection<OrderItem> Items { get; set; } = new List<OrderItem>();
+        public decimal Tips { get; set; }
+        public decimal TotalFee { get; set; }
     }
 }
