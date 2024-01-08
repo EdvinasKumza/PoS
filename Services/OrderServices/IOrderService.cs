@@ -15,5 +15,6 @@ namespace PoS.Services.OrderServices
         Order ApplyLoyaltyProgram(string orderId, string loyaltyProgramId);
         Order AddTip(string orderId, decimal tipAmount);
         Order ProcessPayment(string orderId, CreatePaymentDto createPaymentDto);
+        OrderReceiptDto GetReceipt(string orderId);
     }
 }

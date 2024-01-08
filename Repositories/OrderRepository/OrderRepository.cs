@@ -17,6 +17,13 @@ namespace PoS.Repositories.OrderRepository
             return _dbContext.Orders.FirstOrDefault(o => o.OrderId == orderId);
         }
 
+        public Order GetByIdWithItems(string orderId)
+        {
+            return _dbContext.Orders
+                .Include(o => o.Items)
+                .FirstOrDefault(o => o.OrderId == orderId);
+        }
+
         public void Create(Order order)
         {
             _dbContext.Orders.Add(order);

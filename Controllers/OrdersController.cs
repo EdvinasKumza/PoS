@@ -72,8 +72,8 @@ namespace PoS.Controllers
         {
             try
             {
-                _orderService.AddItemToOrder(orderId, addItemDto);
-                return Ok("Item added to order successfully");
+                var order = _orderService.AddItemToOrder(orderId, addItemDto);
+                return Ok(order);
             }
             catch (Exception ex)
             {
@@ -86,8 +86,8 @@ namespace PoS.Controllers
         {
             try
             {
-                _orderService.RemoveItemFromOrder(orderId, orderItemId);
-                return Ok("Item removed from order successfully");
+                var order = _orderService.RemoveItemFromOrder(orderId, orderItemId);
+                return Ok(order);
             }
             catch (Exception ex)
             {
@@ -156,6 +156,21 @@ namespace PoS.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("{orderId}/receipt")]
+        public IActionResult GetReceipt(string orderId)
+        {
+            try
+            {
+                var orderReceipt = _orderService.GetReceipt(orderId);
+                return Ok(orderReceipt);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 
 }

@@ -4,8 +4,9 @@ namespace PoS.Repositories.OrderRepository
 {
     public interface IOrderRepository
     {
-        public void Create(Order order);
-        public void Update(Order order);
-        public Order GetById(string orderId);
+        void Create(Order order);
+        void Update(Order order);
+        Order GetById(string orderId);
+        Order GetByIdWithItems(string orderId);
     }
 }

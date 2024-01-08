@@ -125,7 +125,7 @@ namespace PoS.Services.OrderServices
 
         public Order AddItemToOrder(string orderId, OrderItemDto newItemDto)
         {
-            var order = _orderRepository.GetById(orderId);
+            var order = _orderRepository.GetByIdWithItems(orderId);
 
             if (order == null)
             {
@@ -144,7 +144,7 @@ namespace PoS.Services.OrderServices
 
         public Order RemoveItemFromOrder(string orderId, string orderItemId)
         {
-            var order = _orderRepository.GetById(orderId);
+            var order = _orderRepository.GetByIdWithItems(orderId);
 
             if (order == null)
             {
@@ -256,18 +256,54 @@ namespace PoS.Services.OrderServices
                 throw new InvalidOperationException("Unable to process payment for this order - it's already paid.");
             }
 
-            var payment = _paymentService.ProcessPayment(order, createPaymentDto);
-
-            if (payment == null)
-            {
-                throw new InvalidOperationException("Couldn't process payment.");
-            }
+            _paymentService.ProcessPayment(order, createPaymentDto);
 
             order.Status = "Paid";
 
             _orderRepository.Update(order);
 
             return order;
+        }
+
+        public OrderReceiptDto GetReceipt(string orderId)
+        {
+            var order = _orderRepository.GetByIdWithItems(orderId);
+
+            if (order == null)
+            {
+                throw new InvalidOperationException("Order not found.");
+            }
+
+            decimal totalItemPrice = 0;
+            var receiptItems = new List<OrderReceiptItemDto>();
+            
+            foreach (var orderItem in order.Items)
+            {
+                totalItemPrice += orderItem.TotalPrice;
+                var receiptItem = new OrderReceiptItemDto
+                {
+                    ItemId = orderItem.OrderItemId,
+                    Quantity = orderItem.Quantity,
+                    UnitPrice = orderItem.TotalPrice / orderItem.Quantity,
+                    TotalPrice = orderItem.TotalPrice
+                };
+                receiptItems.Add(receiptItem);
+            };
+
+            var orderReceipt = new OrderReceiptDto
+            {
+                OrderId = order.OrderId,
+                Date = order.Date,
+                TotalAmountWithTips = order.TotalAmount + order.Tips,
+                TotalAmount = order.TotalAmount,
+                TotalItemPrice = totalItemPrice,
+                DiscountApplied = order.DiscountApplied,
+                Tips = order.Tips,
+                Status = order.Status,
+                Items = receiptItems
+            };
+
+            return orderReceipt;
         }
     }
 }
