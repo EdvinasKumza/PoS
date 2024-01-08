@@ -18,6 +18,9 @@ using PoS.Repositories.DiscountRepository;
 using PoS.Repositories.LoyaltyProgramRepository;
 using PoS.Services.LoyaltyProgramServices;
 using PoS.Repositories.CustomerRepository;
+using PoS.Repositories.PaymentRepository;
+using PoS.Repositories.PaymentMethodRepository;
+using PoS.Services.PaymentServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +48,9 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 builder.Services.AddScoped<ILoyaltyProgramRepository, LoyaltyProgramRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();

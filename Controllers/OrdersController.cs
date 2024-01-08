@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PoS.Services.GenericServices;
 using PoS.Services.OrderServices;
 using PoS.Dtos.Order;
+using PoS.Dtos.Payment;
 using WebApplication1.Models;
 using PoS.Dtos.OrderItem;
 
@@ -134,6 +135,20 @@ namespace PoS.Controllers
             try
             {
                 var order = _orderService.AddTip(orderId, tipAmount);
+                return Ok(order);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("{orderId}/pay")]
+        public IActionResult ProcessPayment(string orderId, [FromBody] CreatePaymentDto createPaymentDto)
+        {
+            try
+            {
+                var order = _orderService.ProcessPayment(orderId, createPaymentDto);
                 return Ok(order);
             }
             catch (InvalidOperationException ex)

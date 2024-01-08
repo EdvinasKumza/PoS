@@ -1,9 +1,10 @@
 using PoS.Services.GenericServices;
 using WebApplication1.Models;
+using PoS.Dtos.Payment;
 
 namespace PoS.Services.PaymentServices;
 
-public interface IPaymentService : IGenericService<Payment>
+public interface IPaymentService
 {
-    // Additional Payment-specific methods, if needed
+    Payment ProcessPayment(Order order, CreatePaymentDto createPaymentDto);
 }

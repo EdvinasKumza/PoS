@@ -1,6 +1,7 @@
 ﻿using PoS.Services.GenericServices;
 using WebApplication1.Models;
 using PoS.Dtos.Order;
+using PoS.Dtos.Payment;
 using PoS.Dtos.OrderItem;
 
 namespace PoS.Services.OrderServices
@@ -13,5 +14,6 @@ namespace PoS.Services.OrderServices
         Order ApplyDiscount(string orderId, string discountId);
         Order ApplyLoyaltyProgram(string orderId, string loyaltyProgramId);
         Order AddTip(string orderId, decimal tipAmount);
+        Order ProcessPayment(string orderId, CreatePaymentDto createPaymentDto);
     }
 }

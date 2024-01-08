@@ -8,24 +8,24 @@ namespace PoS.Controllers;
 [Route("[controller]")]
 public class PaymentController : ControllerBase
 {
-    private readonly IGenericService<Payment> _paymentService;
+    private readonly IGenericService<Payment> _paymentGenericService;
 
-    public PaymentController(IGenericService<Payment> paymentService)
+    public PaymentController(IGenericService<Payment> paymentGenericService)
     {
-        _paymentService = paymentService;
+        _paymentGenericService = paymentGenericService;
     }
     
     [HttpGet]
     public IActionResult Get()
     {
-        var payments = _paymentService.GetAll();
+        var payments = _paymentGenericService.GetAll();
         return Ok(payments);
     }
 
     [HttpGet("{id}")]
     public IActionResult Get(string id)
     {
-        var payment = _paymentService.GetById(id);
+        var payment = _paymentGenericService.GetById(id);
         if (payment == null)
         {
             return NotFound();
@@ -37,7 +37,7 @@ public class PaymentController : ControllerBase
     [HttpPost]
     public IActionResult Post(Payment payment)
     {
-        _paymentService.Create(payment);
+        _paymentGenericService.Create(payment);
         return CreatedAtAction(nameof(Get), new { id = payment.PaymentId }, payment);
     }
 
@@ -49,14 +49,14 @@ public class PaymentController : ControllerBase
             return BadRequest();
         }
 
-        _paymentService.Update(payment);
+        _paymentGenericService.Update(payment);
         return Ok(payment);
     }
 
     [HttpDelete("{id}")]
     public IActionResult Delete(string id)
     {
-        _paymentService.Delete(id);
+        _paymentGenericService.Delete(id);
         return NoContent();
     }
 }
