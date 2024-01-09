@@ -9,5 +9,6 @@ namespace PoS.Repositories.TimeSlotBookingRepository
         void Create(TimeSlotBooking booking);
         TimeSlotBooking GetBookingById(string bookingId);
         void CancelBooking(string bookingId);
+        void UpdateBookingStatus(string bookingId, string  newStatus);
     }
 }

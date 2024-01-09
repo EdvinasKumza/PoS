@@ -44,5 +44,15 @@ namespace PoS.Repositories.TimeSlotBookingRepository
                 _dbContext.SaveChanges();
             }
         }
+        public void UpdateBookingStatus(string bookingId, string newStatus)
+        {
+            var booking = _dbContext.TimeSlotBookings.FirstOrDefault(b => b.BookingId == bookingId);
+
+            if (booking != null)
+            {
+                booking.Status = newStatus;
+                _dbContext.SaveChanges();
+            }
+        }
     }
 }

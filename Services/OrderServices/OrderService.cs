@@ -122,6 +122,38 @@ namespace PoS.Services.OrderServices
 
             return order;
         }
+        public Order CreateFromBooking(CreateOrderDto createOrderDto)
+        {
+            var order = new Order
+            {
+                CustomerId = createOrderDto.CustomerId,
+                TenantId = createOrderDto.TenantId,
+                PlacedBy = createOrderDto.PlacedBy,
+                Date = DateTime.Now,
+                TotalAmount = createOrderDto.TotalAmount,
+                DiscountApplied = createOrderDto.DiscountApplied,
+                Status = createOrderDto.Status,
+                Tips = createOrderDto.Tips,
+                TotalFee = createOrderDto.TotalFee,
+            };
+
+            var orderItems = MapOrderItems(createOrderDto.Items);
+
+            if (createOrderDto.Items.Count != orderItems.Count)
+            {
+                throw new InvalidOperationException("One or more items or services were not found.");
+            }
+
+            foreach (var orderItem in orderItems)
+            {
+                order.Items.Add(orderItem);
+                order.TotalAmount += orderItem.TotalPrice;
+            }
+
+            _orderRepository.Create(order);
+
+            return order;
+        }
 
         public Order AddItemToOrder(string orderId, OrderItemDto newItemDto)
         {

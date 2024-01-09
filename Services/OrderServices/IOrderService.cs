@@ -9,6 +9,7 @@ namespace PoS.Services.OrderServices
     public interface IOrderService
     {
         Order Create(CreateOrderDto createOrderDto);
+        Order CreateFromBooking(CreateOrderDto createOrderDto);
         Order AddItemToOrder(string orderId, OrderItemDto newItemDto);
         Order RemoveItemFromOrder(string orderId, string orderItemId);
         Order ApplyDiscount(string orderId, string discountId);

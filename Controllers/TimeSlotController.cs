@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PoS.Dtos.Order;
 using PoS.Services.GenericServices;
 using PoS.Services.TimeSlotServices;
+using PoS.Services.OrderServices;
+using PoS.Repositories.TimeSlotBookingRepository;
 using WebApplication1.Models;
 
 namespace PoS.Controllers
@@ -11,11 +14,18 @@ namespace PoS.Controllers
     {
         private readonly ITimeSlotService _timeSlotService;
         private readonly IGenericService<TimeSlot> _timeSlotGenericService;
+        private readonly ITimeSlotBookingRepository _timeSlotBookingRepository;
+        private readonly IOrderService _orderService;
 
-        public TimeSlotController(ITimeSlotService timeSlotService, IGenericService<TimeSlot> timeSlotGenericService)
+        public TimeSlotController(ITimeSlotService timeSlotService
+            , IGenericService<TimeSlot> timeSlotGenericService
+            , ITimeSlotBookingRepository timeSlotBookingRepository
+            , IOrderService orderService)
         {
             _timeSlotService = timeSlotService;
             _timeSlotGenericService = timeSlotGenericService;
+            _timeSlotBookingRepository = timeSlotBookingRepository;
+            _orderService = orderService;
         }
 
         [HttpGet]
@@ -99,6 +109,48 @@ namespace PoS.Controllers
                 _timeSlotService.CancelBooking(bookingId);
 
                 return Ok("Booking canceled successfully.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPost("convert-booking-to-order/{bookingId}")]
+        public IActionResult ConvertBookingToOrder(string bookingId, [FromBody] CreateOrderDto createOrderDto)
+        {
+            try
+            {
+                var booking = _timeSlotBookingRepository.GetBookingById(bookingId);
+
+                if (booking == null)
+                {
+                    return NotFound("Booking not found.");
+                }
+
+                if (booking.Status == "Completed")
+                {
+                    return BadRequest("Can't convert bookings with Completed status into orders.");
+                }
+
+                var order = new CreateOrderDto
+                {
+                    CustomerId = booking.CustomerId,
+                    TenantId = createOrderDto.TenantId,
+                    PlacedBy = createOrderDto.PlacedBy,
+                    Date = DateTime.Now,
+                    TotalAmount = createOrderDto.TotalAmount,
+                    DiscountApplied = createOrderDto.DiscountApplied,
+                    Status = createOrderDto.Status,
+                    Tips = createOrderDto.Tips,
+                    TotalFee = createOrderDto.TotalFee,
+                    Items = createOrderDto.Items
+                };
+
+                var createdOrder = _orderService.CreateFromBooking(order);
+
+                _timeSlotBookingRepository.UpdateBookingStatus(bookingId, "Completed");
+
+                return CreatedAtAction(nameof(Get), new { id = createdOrder.OrderId }, createdOrder);
             }
             catch (Exception ex)
             {
